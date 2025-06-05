@@ -29,7 +29,8 @@ const uploadOnCloudinary = async (localFilePath) => {
 
         return { 
             url: response.secure_url,
-            public_id: response.public_id
+            public_id: response.public_id,
+            duration: response.duration || 0 // For videos, duration might be available
         };
     } catch (error) {
         console.log("Cloudinary upload error:", error);
@@ -39,7 +40,7 @@ const uploadOnCloudinary = async (localFilePath) => {
             fs.unlinkSync(localFilePath);
         }
 
-        return { url: "", public_id: "" };
+        return { url: "", public_id: "", duration: 0 };
     }
 }
 
