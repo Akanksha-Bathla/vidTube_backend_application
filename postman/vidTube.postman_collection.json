@@ -1,0 +1,1545 @@
+{
+	"info": {
+		"_postman_id": "d45d5217-6abe-46d0-be97-bcd071fae7d2",
+		"name": "vidTube",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37323568"
+	},
+	"item": [
+		{
+			"name": "healthCheck",
+			"item": [
+				{
+					"name": "healthcheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/healthcheck",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"healthcheck"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "fullname",
+									"value": "Orin",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "orin",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "orin@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "thisIsOrinWorld",
+									"type": "text"
+								},
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/C:/Users/akank/Pictures/Screenshots/Screenshot 2025-01-14 161956.png"
+								},
+								{
+									"key": "coverImage",
+									"type": "file",
+									"src": "/C:/Users/akank/Pictures/Screenshots/Screenshot 2025-01-18 133836.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{vidtube}}/users/register",
+							"host": [
+								"{{vidtube}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"User object, accessToken, and refreshToken exist in the response\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"\r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.data).to.be.an('object');\r",
+									"  pm.expect(responseData.data.user).to.be.an('object');\r",
+									"  pm.expect(responseData.data.accessToken).to.exist;\r",
+									"  pm.expect(responseData.data.refreshToken).to.exist;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"orin@gmail.com\",\r\n    \"username\": \"orin\",\r\n    \"password\": \"thisIsOrinWorld\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{vidtube}}/users/login",
+							"host": [
+								"{{vidtube}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						},
+						"description": "### Login User\n\nThis endpoint allows users to log in to the application.\n\n#### Request Body\n\n- email (string, required): The email of the user.\n    \n- username (string, required): The username of the user.\n    \n- password (string, required): The password for the user account.\n    \n\n#### Response\n\nThe response is a JSON object with the following schema:\n\n``` json\n{\n    \"type\": \"object\",\n    \"properties\": {\n        \"statusCode\": {\n            \"type\": \"number\"\n        },\n        \"data\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"user\": {\n                    \"type\": \"object\",\n                    \"properties\": {\n                        \"_id\": {\n                            \"type\": \"string\"\n                        },\n                        \"username\": {\n                            \"type\": \"string\"\n                        },\n                        \"email\": {\n                            \"type\": \"string\"\n                        },\n                        \"fullname\": {\n                            \"type\": \"string\"\n                        },\n                        \"avatar\": {\n                            \"type\": \"string\"\n                        },\n                        \"coverImage\": {\n                            \"type\": \"string\"\n                        },\n                        \"watchHistory\": {\n                            \"type\": \"array\"\n                        },\n                        \"createdAt\": {\n                            \"type\": \"string\"\n                        },\n                        \"updatedAt\": {\n                            \"type\": \"string\"\n                        },\n                        \"__v\": {\n                            \"type\": \"number\"\n                        }\n                    }\n                },\n                \"accessToken\": {\n                    \"type\": \"string\"\n                },\n                \"refreshToken\": {\n                    \"type\": \"string\"\n                }\n            }\n        },\n        \"message\": {\n            \"type\": \"string\"\n        },\n        \"success\": {\n            \"type\": \"boolean\"\n        }\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "refresh-token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test for status code\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Test for response time\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"// Test for response body properties and values\r",
+									"pm.test(\"Response body has required properties\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('statusCode', 200);\r",
+									"    pm.expect(jsonData.data).to.have.property('accessToken');\r",
+									"    pm.expect(jsonData.data).to.have.property('refreshToken');\r",
+									"    pm.expect(jsonData).to.have.property('message', 'Access token refreshed successfully.');\r",
+									"    pm.expect(jsonData).to.have.property('success', true);\r",
+									"});\r",
+									"var template = `\r",
+									"<style type=\"text/css\">\r",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+									"    .tftable tr {background-color:#ffffff;}\r",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+									"    .tftable tr:hover {background-color:#e0ffff;}\r",
+									"</style>\r",
+									"\r",
+									"<table class=\"tftable\" border=\"1\">\r",
+									"    <tr>\r",
+									"        <th>Access Token</th>\r",
+									"        <th>Refresh Token</th>\r",
+									"    </tr>\r",
+									"    <tr>\r",
+									"        <td>{{response.data.accessToken}}</td>\r",
+									"        <td>{{response.data.refreshToken}}</td>\r",
+									"    </tr>\r",
+									"</table>\r",
+									"`;\r",
+									"\r",
+									"function constructVisualizerPayload() {\r",
+									"    return { response: pm.response.json() }\r",
+									"}\r",
+									"\r",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"one1@gmail.com\",\r\n    \"username\": \"ones\",\r\n    \"password\": \"someRandomStuff\"\r\n}"
+						},
+						"url": {
+							"raw": "{{vidtube}}/users/refresh-token",
+							"host": [
+								"{{vidtube}}"
+							],
+							"path": [
+								"users",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"one1@gmail.com\",\r\n    \"username\": \"ones\",\r\n    \"password\": \"someRandomStuff\"\r\n}"
+						},
+						"url": {
+							"raw": "{{vidtube}}/users/logout",
+							"host": [
+								"{{vidtube}}"
+							],
+							"path": [
+								"users",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change-password",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"oldPassword\": \"someRandomStuff\",\r\n  \"newPassword\": \"newPassword\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{vidtube}}/users/change-password",
+							"host": [
+								"{{vidtube}}"
+							],
+							"path": [
+								"users",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "currentUser",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"one1@gmail.com\",\r\n    \"username\": \"ones\",\r\n    \"password\": \"newPassword\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/users/currentUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"currentUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get Channel Profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"one1@gmail.com\",\r\n    \"username\": \"ones\",\r\n    \"password\": \"newPassword\"\r\n}"
+						},
+						"url": {
+							"raw": "{{vidtube}}/users/c/ones",
+							"host": [
+								"{{vidtube}}"
+							],
+							"path": [
+								"users",
+								"c",
+								"ones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-account",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullname\": \"Orin\",\r\n    \"email\": \"one1@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{vidtube}}/users/update-account",
+							"host": [
+								"{{vidtube}}"
+							],
+							"path": [
+								"users",
+								"update-account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update cover-image",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "coverImage",
+									"type": "file",
+									"src": "/C:/Users/akank/Pictures/Screenshots/Screenshot 2025-03-14 184258.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{vidtube}}/users/cover-image",
+							"host": [
+								"{{vidtube}}"
+							],
+							"path": [
+								"users",
+								"cover-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update avatar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/C:/Users/akank/Pictures/Screenshots/Screenshot 2025-03-26 210446.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{vidtube}}/users/avatar",
+							"host": [
+								"{{vidtube}}"
+							],
+							"path": [
+								"users",
+								"avatar"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Watch history",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/C:/Users/akank/Pictures/Screenshots/Screenshot 2025-03-26 210446.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{vidtube}}/users/history",
+							"host": [
+								"{{vidtube}}"
+							],
+							"path": [
+								"users",
+								"history"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "videos",
+			"item": [
+				{
+					"name": "PublishAVideo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "videoOne",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "this is my 1st video on the internet",
+									"type": "text"
+								},
+								{
+									"key": "videoFile",
+									"type": "file",
+									"src": "/C:/Users/akank/Downloads/code+files/html/images/chai_pe_charcha-1080.mp4"
+								},
+								{
+									"key": "thumbnail",
+									"type": "file",
+									"src": "/C:/Users/akank/Pictures/Screenshots/Screenshot 2025-06-03 210523.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/videos/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"videos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "videos",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/videos/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"videos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAVideo",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/videos/68411daa90bfd59fab277d4d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"videos",
+								"68411daa90bfd59fab277d4d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateVideo",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "thumbnail",
+									"type": "file",
+									"src": "/C:/Users/akank/Downloads/code+files/html/images/hc.png",
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "changedVideoTitle",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/videos/68411daa90bfd59fab277d4d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"videos",
+								"68411daa90bfd59fab277d4d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteVideo",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "thumbnail",
+									"type": "file",
+									"src": "/C:/Users/akank/Downloads/code+files/html/images/hc.png",
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "changedVideoTitle",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/videos/68411daa90bfd59fab277d4d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"videos",
+								"68411daa90bfd59fab277d4d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "togglePublish",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/videos/toggle/publish/6841257596dc8d0c12c4e4b3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"videos",
+								"toggle",
+								"publish",
+								"6841257596dc8d0c12c4e4b3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateComment",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"content\": \"Updated Comment.\" }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/comments/c/6841564d6e163f4f15226023",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"c",
+								"6841564d6e163f4f15226023"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteComment",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/comments/c/684157c58ba22dae26f2807b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"c",
+								"684157c58ba22dae26f2807b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "comment",
+			"item": [
+				{
+					"name": "getVideoComment",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/comments/video/6841257596dc8d0c12c4e4b3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"video",
+								"6841257596dc8d0c12c4e4b3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addACommentToVideo",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"content\": \"New Comment..\" }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/comments/video/6841257596dc8d0c12c4e4b3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"video",
+								"6841257596dc8d0c12c4e4b3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateAComment",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"content\": \"new comment to updated comment.\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/comments/c/6841a212acbe4a30dd224b77",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"c",
+								"6841a212acbe4a30dd224b77"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteAComment",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/comments/c/684157aa8ba22dae26f28072",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"c",
+								"684157aa8ba22dae26f28072"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addACommentToTweet",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"content\": \"This is comment on a tweet.\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/comments/tweet/68417d2b788ca2c83bb779c4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"tweet",
+								"68417d2b788ca2c83bb779c4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTweetComment",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/comments/tweet/68417d2b788ca2c83bb779c4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"tweet",
+								"68417d2b788ca2c83bb779c4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "tweet",
+			"item": [
+				{
+					"name": "createTweet",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"content\": \"This is a tweet or community post.\" }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/tweets/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"tweets",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserTweets",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/tweets/user/68399f37a52209024bbd1164",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"tweets",
+								"user",
+								"68399f37a52209024bbd1164"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteTweet",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/tweets/68417e5a7dffca360a703388",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"tweets",
+								"68417e5a7dffca360a703388"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateTweet",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"content\": \"This is another tweet. new tweet.\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/tweets/68417e5a7dffca360a703388",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"tweets",
+								"68417e5a7dffca360a703388"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "playlist",
+			"item": [
+				{
+					"name": "createPlaylist",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Playlist\",\r\n    \"description\": \"description of a Playlist.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/playlists/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"playlists",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPlaylistById",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/playlists/6841aa0656759332ad22e6ae",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"playlists",
+								"6841aa0656759332ad22e6ae"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updatePlaylistNameAndDescription",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"Playlist Name\",\r\n\"description\": \"Playlist description\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/v1/playlists/6841a88156759332ad22e699",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"playlists",
+								"6841a88156759332ad22e699"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletePlaylist",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/playlists/6841a88156759332ad22e699",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"playlists",
+								"6841a88156759332ad22e699"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addAVideo",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/playlists/add/6841ac061e02e1b51abca3d6/6841aa0656759332ad22e6ae",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"playlists",
+								"add",
+								"6841ac061e02e1b51abca3d6",
+								"6841aa0656759332ad22e6ae"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "removeVideoFromPlaylist",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/playlists/remove/6841ac061e02e1b51abca3d6/6841aa0656759332ad22e6ae",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"playlists",
+								"remove",
+								"6841ac061e02e1b51abca3d6",
+								"6841aa0656759332ad22e6ae"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserPlaylist",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/playlists/user/68399f37a52209024bbd1164",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"playlists",
+								"user",
+								"68399f37a52209024bbd1164"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "subscription",
+			"item": [
+				{
+					"name": "channelSubscribers",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/subscriptions/c/683963873e7fe5eed58a8f01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"c",
+								"683963873e7fe5eed58a8f01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "subscribedChannels",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/subscriptions/u/683963873e7fe5eed58a8f01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"u",
+								"683963873e7fe5eed58a8f01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "toggleSubscription",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/subscriptions/c/683963873e7fe5eed58a8f01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"c",
+								"683963873e7fe5eed58a8f01"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "like",
+			"item": [
+				{
+					"name": "likedVideos",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/likes/videos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"likes",
+								"videos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "toggleCommentLike",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/likes/toggle/c/6841a212acbe4a30dd224b77",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"likes",
+								"toggle",
+								"c",
+								"6841a212acbe4a30dd224b77"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "toggleVideoLike",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/likes/toggle/v/6841ac061e02e1b51abca3d6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"likes",
+								"toggle",
+								"v",
+								"6841ac061e02e1b51abca3d6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "toggleTweetLike",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/likes/toggle/t/68417c3e788ca2c83bb779c1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"likes",
+								"toggle",
+								"t",
+								"68417c3e788ca2c83bb779c1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "dashboard",
+			"item": [
+				{
+					"name": "channelStats",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/dashboard/stats",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"dashboard",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "channelVideos",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/v1/dashboard/videos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"dashboard",
+								"videos"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
