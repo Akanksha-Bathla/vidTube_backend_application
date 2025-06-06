@@ -11,8 +11,6 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Invalid video ID.");
     }
     const userId = req.user._id;
-    console.log("User ID:", userId);
-    console.log("Video ID:", videoId);
     const like = await Like.findOne({ likedBy: userId, video: videoId });
     if (like) {
         // User has already liked the video, so remove the like
